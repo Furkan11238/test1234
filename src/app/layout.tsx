@@ -9,33 +9,92 @@ const montserrat = Montserrat({
   variable: "--font-montserrat",
 });
 
+const SITE_URL = "https://www.mfkstukadoors.be";
+
+const defaultTitle =
+  "Stukadoor Limburg - MFK Stukadoors | Pleisterwerken, Gyproc & Renovatie";
+const defaultDescription =
+  "MFK Stukadoors uit Heusden-Zolder: meer dan 20 jaar ervaring in binnen- en buitenpleisterwerken, gyproc, spuitplamuur, schilderwerken en renovatie in heel Limburg. Vraag uw gratis offerte aan.";
+
 export const metadata: Metadata = {
-  title: "MFK Stukadoors — Vakmanschap in Limburg",
-  description:
-    "MFK Stukadoors: 20 jaar ervaring in pleisterwerken, gyproc, schilderwerken en renovatie in heel Limburg. Vraag een gratis offerte aan.",
-  authors: [{ name: "MFK Stukadoors" }],
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: defaultTitle,
+    template: "%s | MFK Stukadoors",
+  },
+  description: defaultDescription,
+  applicationName: "MFK Stukadoors",
+  authors: [{ name: "MFK Stukadoors", url: SITE_URL }],
+  creator: "MFK Stukadoors",
+  publisher: "MFK Stukadoors",
+  keywords: [
+    "stukadoor",
+    "stukadoors",
+    "pleisterwerken",
+    "binnenpleisterwerk",
+    "buitenpleisterwerk",
+    "gyproc",
+    "droge bouw",
+    "spuitplamuur",
+    "schilderwerken",
+    "renovatie",
+    "herstellingen muren",
+    "Limburg",
+    "Heusden-Zolder",
+    "Hasselt",
+    "Genk",
+    "Lummen",
+    "Sint-Truiden",
+    "Tongeren",
+    "Maaseik",
+    "Overpelt",
+    "Peer",
+    "Ham",
+    "Gingelom",
+    "Nieuwerkerken",
+    "Beringen",
+    "Bilzen",
+    "Borgloon",
+    "Boutersem",
+    "Bree",
+    "Brugge",
+    "Brussel",
+    "Houthalen-Helchteren",
+    "Hechtel-Eksel",
+    "Leopoldsburg",
+    "Hechtel",
+    "MFK Stukadoors",
+    "MFK Pleisterwerken",
+    "gratis offerte",
+  ],
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
     type: "website",
-    title: "MFK Stukadoors — Vakmanschap in Limburg",
-    description:
-      "MFK Stukadoors: 20 jaar ervaring in pleisterwerken, gyproc, schilderwerken en renovatie in heel Limburg. Vraag een gratis offerte aan.",
-    images: [
-      "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a848d4a0-ade3-4e91-8b57-7da016da8f6e/id-preview-06ed4e82--75c776dc-f2df-4bf8-b528-148386ceb927.lovable.app-1773454210773.png",
-    ],
+    locale: "nl_BE",
+    url: SITE_URL,
+    siteName: "MFK Stukadoors",
+    title: defaultTitle,
+    description: defaultDescription,
   },
   twitter: {
     card: "summary_large_image",
-    title: "MFK Stukadoors — Vakmanschap in Limburg",
-    description:
-      "MFK Stukadoors: 20 jaar ervaring in pleisterwerken, gyproc, schilderwerken en renovatie in heel Limburg. Vraag een gratis offerte aan.",
-    images: [
-      "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a848d4a0-ade3-4e91-8b57-7da016da8f6e/id-preview-06ed4e82--75c776dc-f2df-4bf8-b528-148386ceb927.lovable.app-1773454210773.png",
-    ],
+    title: defaultTitle,
+    description: defaultDescription,
   },
-  metadataBase: new URL("https://www.mfkstukadoors.be"),
   alternates: {
     canonical: "/",
   },
+  category: "construction",
 };
 
 export default function RootLayout({
