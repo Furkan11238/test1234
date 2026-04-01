@@ -1,16 +1,18 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+/** Section ids on the homepage — hrefs use `/#id` so links work from any route (e.g. /privacy-policy). */
 const navLinks = [
-  { label: "Home", href: "#home" },
-  { label: "Diensten", href: "#diensten" },
-  { label: "Realisaties", href: "#realisaties" },
-  { label: "FAQ", href: "#faq" },
-  { label: "Contact", href: "#contact" },
-];
+  { label: "Home", id: "home" },
+  { label: "Diensten", id: "diensten" },
+  { label: "Realisaties", id: "realisaties" },
+  { label: "FAQ", id: "faq" },
+  { label: "Contact", id: "contact" },
+] as const;
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -20,7 +22,7 @@ const Navbar = () => {
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 20);
-      const sections = navLinks.map((l) => l.href.slice(1));
+      const sections = navLinks.map((l) => l.id);
       for (const id of [...sections].reverse()) {
         const el = document.getElementById(id);
         if (el && el.getBoundingClientRect().top <= 120) {
@@ -40,32 +42,34 @@ const Navbar = () => {
       }`}
     >
       <div className="container mx-auto flex items-center justify-between h-16 px-6">
-        <a href="#home" className="flex items-center">
+        <Link href="/#home" className="flex items-center">
           <span className="text-2xl font-display font-black text-primary">
             MFK
           </span>
           <span className="text-sm font-bold tracking-[0.1em] text-foreground ml-2 uppercase">
             Stukadoors
           </span>
-        </a>
+        </Link>
 
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
+            <Link
+              key={link.id}
+              href={`/#${link.id}`}
               className={`text-sm font-bold transition-colors hover:text-primary ${
-                active === link.href ? "text-primary" : "text-muted-foreground"
+                active === `#${link.id}`
+                  ? "text-primary"
+                  : "text-muted-foreground"
               }`}
             >
               {link.label}
-            </a>
+            </Link>
           ))}
         </div>
 
         <div className="hidden md:block">
           <Button asChild>
-            <a href="#contact">Vraag een offerte</a>
+            <Link href="/#contact">Vraag een offerte</Link>
           </Button>
         </div>
 
@@ -81,19 +85,19 @@ const Navbar = () => {
       {open && (
         <div className="md:hidden bg-background border-t px-6 pb-4">
           {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
+            <Link
+              key={link.id}
+              href={`/#${link.id}`}
               onClick={() => setOpen(false)}
               className="block py-3 text-sm font-bold text-foreground hover:text-primary"
             >
               {link.label}
-            </a>
+            </Link>
           ))}
           <Button asChild className="w-full mt-2">
-            <a href="#contact" onClick={() => setOpen(false)}>
+            <Link href="/#contact" onClick={() => setOpen(false)}>
               Vraag een offerte
-            </a>
+            </Link>
           </Button>
         </div>
       )}

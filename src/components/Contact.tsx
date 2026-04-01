@@ -2,7 +2,16 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Phone, Mail, MapPin, Globe } from "lucide-react";
+import { SectionHeading } from "@/components/section-heading";
+import {
+  Phone,
+  Mail,
+  MapPin,
+  Globe,
+  ShieldCheck,
+  Star,
+  MapPinned,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -39,34 +48,70 @@ const serviceOptions = [
   "Renovatie & Herstellingen",
 ];
 
+const emptyForm = {
+  naam: "",
+  email: "",
+  telefoon: "",
+  service: "",
+  bericht: "",
+};
+
 const Contact = () => {
   const { toast } = useToast();
   const [sending, setSending] = useState(false);
+  const [form, setForm] = useState(emptyForm);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const set =
+    (field: keyof typeof emptyForm) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      setForm((f) => ({ ...f, [field]: e.target.value }));
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSending(true);
-    setTimeout(() => {
-      setSending(false);
-      toast({
-        title: "Aanvraag verstuurd!",
-        description: "Wij nemen zo snel mogelijk contact met u op.",
+    try {
+      const response = await fetch("/api/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.naam,
+          email: form.email,
+          telephone: form.telefoon,
+          service: form.service,
+          message: form.bericht,
+        }),
       });
-      (e.target as HTMLFormElement).reset();
-    }, 1000);
+      if (response.ok) {
+        toast({
+          title: "Aanvraag verstuurd!",
+          description: "Wij nemen zo snel mogelijk contact met u op.",
+        });
+        setForm(emptyForm);
+      } else {
+        toast({
+          title: "Fout bij het versturen!",
+          description: "Probeer het later opnieuw.",
+        });
+      }
+    } catch {
+      toast({
+        title: "Fout bij het versturen!",
+        description: "Probeer het later opnieuw.",
+      });
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
     <section id="contact" className="py-24 bg-background">
       <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl font-black text-foreground mb-4">
-            Contacteer Ons
-          </h2>
-          <p className="text-muted-foreground">
-            Vraag een gratis offerte aan of stel uw vraag.
-          </p>
-        </div>
+        <SectionHeading
+          className="mb-16"
+          eyebrow="Neem contact op"
+          title="Contacteer ons"
+          description="Vraag een gratis offerte aan of stel uw vraag."
+        />
         <div className="grid lg:grid-cols-2 gap-12 max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -75,6 +120,9 @@ const Contact = () => {
             transition={{ duration: 0.4 }}
           >
             <div className="space-y-6 mb-8">
+              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                Contactgegevens
+              </p>
               {contactInfo.map((c) => (
                 <div key={c.label} className="flex items-start gap-4">
                   <c.icon
@@ -94,10 +142,55 @@ const Contact = () => {
                 </div>
               ))}
             </div>
-            <div className="aspect-video bg-light rounded-lg flex items-center justify-center">
-              <span className="text-muted-foreground text-sm">
-                Kaart — Heusden-Zolder
-              </span>
+            <div className="space-y-6 pt-2 border-t border-border">
+              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground pt-6">
+                Waarom kiezen voor ons?
+              </p>
+              <div className="flex items-start gap-4">
+                <ShieldCheck
+                  className="w-5 h-5 text-primary mt-0.5 shrink-0"
+                  strokeWidth={1.5}
+                />
+                <div>
+                  <p className="text-sm font-semibold text-foreground">
+                    20 jaar vakmanschap
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Meer dan twee decennia ervaring in pleisterwerken en
+                    afwerking.
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <Star
+                  className="w-5 h-5 text-primary mt-0.5 shrink-0"
+                  strokeWidth={1.5}
+                />
+                <div>
+                  <p className="text-sm font-semibold text-foreground">
+                    Gratis & vrijblijvende offerte
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    U zit nergens aan vast. Wij komen ter plaatse en geven een
+                    eerlijke prijs.
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <MapPinned
+                  className="w-5 h-5 text-primary mt-0.5 shrink-0"
+                  strokeWidth={1.5}
+                />
+                <div>
+                  <p className="text-sm font-semibold text-foreground">
+                    Actief in heel Limburg
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Van Hasselt tot Genk en ver daarbuiten — wij komen naar u
+                    toe.
+                  </p>
+                </div>
+              </div>
             </div>
           </motion.div>
 
@@ -116,6 +209,8 @@ const Contact = () => {
               <Input
                 required
                 placeholder="Uw naam"
+                value={form.naam}
+                onChange={set("naam")}
                 className="focus:ring-primary focus:border-primary"
               />
             </div>
@@ -124,20 +219,34 @@ const Contact = () => {
                 <label className="text-sm font-bold text-foreground mb-1.5 block">
                   E-mail
                 </label>
-                <Input required type="email" placeholder="uw@email.be" />
+                <Input
+                  required
+                  type="email"
+                  placeholder="uw@email.be"
+                  value={form.email}
+                  onChange={set("email")}
+                />
               </div>
               <div>
                 <label className="text-sm font-bold text-foreground mb-1.5 block">
                   Telefoon
                 </label>
-                <Input type="tel" placeholder="04XX XX XX XX" />
+                <Input
+                  type="tel"
+                  placeholder="04XX XX XX XX"
+                  value={form.telefoon}
+                  onChange={set("telefoon")}
+                />
               </div>
             </div>
             <div>
               <label className="text-sm font-bold text-foreground mb-1.5 block">
                 Type werk
               </label>
-              <Select>
+              <Select
+                value={form.service}
+                onValueChange={(v) => setForm((f) => ({ ...f, service: v }))}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Selecteer een dienst" />
                 </SelectTrigger>
@@ -158,6 +267,8 @@ const Contact = () => {
                 required
                 rows={4}
                 placeholder="Beschrijf kort uw project..."
+                value={form.bericht}
+                onChange={set("bericht")}
               />
             </div>
             <Button

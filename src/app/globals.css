@@ -65,3 +65,8 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* Prevent fixed navbar from shifting when Radix UI locks body scroll */
+nav.fixed {
+  padding-right: var(--removed-body-scroll-bar-size, 0px);
+}

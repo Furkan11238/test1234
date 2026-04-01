@@ -3,7 +3,7 @@ import Hero from "@/components/Hero";
 import Services from "@/components/Services";
 import TrustStrip from "@/components/TrustStrip";
 import Portfolio from "@/components/Portfolio";
-import FAQ2 from "@/components/FAQ2";
+import FAQ from "@/components/FAQ";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
@@ -15,7 +15,7 @@ export default function HomePage() {
       <Services />
       <TrustStrip />
       <Portfolio />
-      <FAQ2 />
+      <FAQ />
       <Contact />
       <Footer />
     </>

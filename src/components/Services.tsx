@@ -1,41 +1,93 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { Home, Building2, LayoutGrid, Paintbrush, Brush, Wrench } from "lucide-react";
+import { SectionHeading } from "@/components/section-heading";
 
-const services = [
-  { icon: Home, title: "Binnenpleisterwerken", desc: "Strakke en duurzame binnenafwerking voor nieuwbouw en renovatie." },
-  { icon: Building2, title: "Buitenpleisterwerken", desc: "Weerbestendige gevelbekleding die uw woning beschermt en verfraait." },
-  { icon: LayoutGrid, title: "Gyproc / Droge bouw", desc: "Snelle en nette plaatsing van gipskartonwanden en -plafonds." },
-  { icon: Paintbrush, title: "Spuitplamuur", desc: "Spiegelgladde muurafwerking klaar voor schilderwerk." },
-  { icon: Brush, title: "Schilderwerken", desc: "Professioneel schilderwerk binnen en buiten voor een perfect eindresultaat." },
-  { icon: Wrench, title: "Renovatie & Herstellingen", desc: "Herstel van beschadigde muren, scheuren en oude afwerkingen." },
+type Service = {
+  title: string;
+  desc: string;
+  image: string;
+};
+
+const services: Service[] = [
+  {
+    title: "Binnenpleisterwerken",
+    desc: "Strakke en duurzame binnenafwerking voor nieuwbouw en renovatie.",
+    image:
+      "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "Buitenpleisterwerken",
+    desc: "Weerbestendige gevelbekleding die uw woning beschermt en verfraait.",
+    image:
+      "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "Gyproc / Droge bouw",
+    desc: "Snelle en nette plaatsing van gipskartonwanden en -plafonds.",
+    image:
+      "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "Spuitplamuur",
+    desc: "Spiegelgladde muurafwerking klaar voor schilderwerk.",
+    image:
+      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "Schilderwerken",
+    desc: "Professioneel schilderwerk binnen en buiten voor een perfect eindresultaat.",
+    image:
+      "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    title: "Renovatie & Herstellingen",
+    desc: "Herstel van beschadigde muren, scheuren en oude afwerkingen.",
+    image:
+      "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80",
+  },
 ];
 
 const Services = () => (
-  <section id="diensten" className="py-24 bg-light">
+  <section id="diensten" className="py-24">
     <div className="container mx-auto px-6">
-      <div className="text-center mb-16">
-        <h2 className="text-3xl font-black text-foreground mb-4">Onze Diensten</h2>
-        <p className="text-muted-foreground max-w-xl mx-auto">
-          Van ruwbouw tot afwerking — wij verzorgen het volledige pleisterwerk.
-        </p>
-      </div>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <SectionHeading
+        className="mb-16"
+        eyebrow="Vakmanschap"
+        title="Onze diensten"
+        description="Van ruwbouw tot afwerking — wij verzorgen het volledige pleisterwerk, met oog voor detail op de werf én in het eindresultaat."
+      />
+
+      <div className="grid gap-x-6 gap-y-12 sm:grid-cols-2 xl:grid-cols-3">
         {services.map((s, i) => (
-          <motion.div
+          <motion.article
             key={s.title}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: i * 0.08 }}
-            className="group relative bg-card rounded-lg p-6 shadow-[0_0_0_1px_hsl(var(--border)),0_2px_4px_rgba(0,0,0,0.05)] hover:shadow-md transition-all duration-200"
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.45, delay: Math.min(i * 0.07, 0.35) }}
+            className="group flex flex-col"
           >
-            <div className="absolute top-0 left-0 right-0 h-1 bg-primary rounded-t-lg scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center" />
-            <s.icon className="w-8 h-8 text-primary mb-4" strokeWidth={1.5} />
-            <h3 className="text-lg font-bold text-foreground mb-2">{s.title}</h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
-          </motion.div>
+            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-muted ring-2 ring-transparent transition-all duration-300 group-hover:ring-primary">
+              <Image
+                src={s.image}
+                alt={s.title}
+                fill
+                className="object-cover"
+                sizes="(min-width: 1280px) 33vw, (min-width: 640px) 50vw, 100vw"
+              />
+            </div>
+
+            <div className="mt-5 flex flex-col gap-1.5">
+              <h3 className="text-[1rem] font-semibold tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
+                {s.title}
+              </h3>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                {s.desc}
+              </p>
+            </div>
+          </motion.article>
         ))}
       </div>
     </div>
