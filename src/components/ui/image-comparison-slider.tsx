@@ -54,7 +54,18 @@ export const ImageComparison = ({
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      {/* After Image (Top Layer) */}
+      {/* Before Image (Bottom Layer) */}
+      <Image
+        src={beforeImage}
+        alt={altBefore}
+        fill
+        className="object-cover object-left"
+        draggable={false}
+        sizes="(min-width: 768px) 75vw, 100vw"
+        priority
+      />
+
+      {/* After Image (Top Layer) — clipped to reveal from the left */}
       <div
         className="absolute top-0 left-0 h-full w-full overflow-hidden"
         style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
@@ -68,17 +79,6 @@ export const ImageComparison = ({
           sizes="(min-width: 768px) 75vw, 100vw"
         />
       </div>
-
-      {/* Before Image (Bottom Layer) */}
-      <Image
-        src={beforeImage}
-        alt={altBefore}
-        fill
-        className="object-cover object-left"
-        draggable={false}
-        sizes="(min-width: 768px) 75vw, 100vw"
-        priority
-      />
 
       {/* Slider Handle */}
       <div
