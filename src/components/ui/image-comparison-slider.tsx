@@ -1,61 +1,48 @@
 "use client";
 
 import React, { useState, useRef, useCallback, useEffect } from "react";
+import Image from "next/image";
 
-// This component takes two image URLs (before and after) and creates a slider to compare them.
 export const ImageComparison = ({
   beforeImage,
   afterImage,
   altBefore = "Before",
   altAfter = "After",
+}: {
+  beforeImage: string;
+  afterImage: string;
+  altBefore?: string;
+  altAfter?: string;
 }) => {
-  // State to track the slider's position (from 0 to 100)
   const [sliderPosition, setSliderPosition] = useState(50);
-  // State to track if the user is currently dragging the slider
   const [isDragging, setIsDragging] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  // Ref to the main container element to get its dimensions
-  const containerRef = useRef(null);
-
-  // Function to handle the slider movement (for both mouse and touch)
   const handleMove = useCallback(
-    (clientX) => {
-      // If not dragging or no container ref, do nothing
+    (clientX: number) => {
       if (!isDragging || !containerRef.current) return;
-
-      // Get the bounding box of the container
-      const rect = (
-        containerRef.current as HTMLElement
-      ).getBoundingClientRect();
-      // Calculate the new slider position as a percentage
-      let newPosition = ((clientX - rect.left) / rect.width) * 100;
-
-      // Clamp the position to be between 0 and 100 to prevent it from going out of bounds
-      newPosition = Math.max(0, Math.min(100, newPosition));
-
+      const rect = containerRef.current.getBoundingClientRect();
+      const newPosition = Math.max(
+        0,
+        Math.min(100, ((clientX - rect.left) / rect.width) * 100),
+      );
       setSliderPosition(newPosition);
     },
     [isDragging],
   );
 
-  // Mouse event handlers
   const handleMouseDown = () => setIsDragging(true);
-  const handleMouseUp = () => setIsDragging(false);
-  const handleMouseMove = (e) => handleMove(e.clientX);
+  const handleMouseUp = useCallback(() => setIsDragging(false), []);
+  const handleMouseMove = (e: React.MouseEvent) => handleMove(e.clientX);
 
-  // Touch event handlers
   const handleTouchStart = () => setIsDragging(true);
   const handleTouchEnd = () => setIsDragging(false);
-  const handleTouchMove = (e) => handleMove(e.touches[0].clientX);
+  const handleTouchMove = (e: React.TouchEvent) =>
+    handleMove(e.touches[0].clientX);
 
-  // Effect to add and clean up global event listeners for mouse up/leave
-  // This ensures dragging stops even if the cursor leaves the component area
   useEffect(() => {
     window.addEventListener("mouseup", handleMouseUp);
-    // Clean up the event listener when the component unmounts
-    return () => {
-      window.removeEventListener("mouseup", handleMouseUp);
-    };
+    return () => window.removeEventListener("mouseup", handleMouseUp);
   }, [handleMouseUp]);
 
   return (
@@ -63,35 +50,40 @@ export const ImageComparison = ({
       ref={containerRef}
       className="relative w-full max-w-4xl mx-auto select-none rounded-2xl overflow-hidden shadow-2xl aspect-[16/9]"
       onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseUp} // Stop dragging if mouse leaves the container
+      onMouseLeave={handleMouseUp}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      {/* After Image (Top Layer) - Its visibility is controlled by the clip-path */}
+      {/* After Image (Top Layer) */}
       <div
         className="absolute top-0 left-0 h-full w-full overflow-hidden"
         style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
       >
-        <img
+        <Image
           src={afterImage}
           alt={altAfter}
-          className="h-full w-full object-cover object-left"
-          draggable="false"
+          fill
+          className="object-cover object-left"
+          draggable={false}
+          sizes="(min-width: 768px) 75vw, 100vw"
         />
       </div>
 
       {/* Before Image (Bottom Layer) */}
-      <img
+      <Image
         src={beforeImage}
         alt={altBefore}
-        className="block h-full w-full object-cover object-left"
-        draggable="false"
+        fill
+        className="object-cover object-left"
+        draggable={false}
+        sizes="(min-width: 768px) 75vw, 100vw"
+        priority
       />
 
       {/* Slider Handle */}
       <div
         className="absolute top-0 bottom-0 w-1.5 bg-white/80 cursor-ew-resize flex items-center justify-center"
-        style={{ left: `calc(${sliderPosition}% - 0.375rem)` }} // Center the handle on the line
+        style={{ left: `calc(${sliderPosition}% - 0.375rem)` }}
         onMouseDown={handleMouseDown}
         onTouchStart={handleTouchStart}
       >
@@ -110,8 +102,8 @@ export const ImageComparison = ({
             strokeLinejoin="round"
             className="text-gray-700"
           >
-            <line x1="15" y1="18" x2="9" y2="12"></line>
-            <line x1="9" y1="6" x2="15" y2="12"></line>
+            <line x1="15" y1="18" x2="9" y2="12" />
+            <line x1="9" y1="6" x2="15" y2="12" />
           </svg>
         </div>
       </div>
