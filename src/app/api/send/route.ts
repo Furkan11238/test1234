@@ -110,7 +110,7 @@ export async function POST(request: Request) {
 
     const { error: offerteError } = await resend.emails.send({
       from: "MFK Stukadoors <mfk@contact.mfkstukadoors.be>",
-      to: "furkankarakocfurkan@hotmail.com",
+      to: "info@mfkstukadoors.be",
       template: {
         id: "offerte-email",
         variables: templateVariables,
