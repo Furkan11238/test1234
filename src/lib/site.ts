@@ -8,10 +8,10 @@ export const TITLE_TEMPLATE_SUFFIX = " | MFK Stukadoors";
 export const META_TITLE_MAX_CHARS = 69;
 
 export const DEFAULT_TITLE =
-  "Stukadoor Limburg - MFK Stukadoors | Pleisterwerken gyproc, renovatie";
+  "Stukadoor & renovatie in Limburg | MFK Stukadoors";
 
 export const DEFAULT_DESCRIPTION =
-  "MFK Stukadoors uit Heusden-Zolder: meer dan 20 jaar ervaring in binnen- en buitenpleisterwerken, gyproc, spuitplamuur, schilderwerken en renovatie in heel Limburg. Vraag uw gratis offerte aan.";
+  "MFK Stukadoors in Limburg: pleisterwerken, gyproc en renovatie met 20+ jaar ervaring. Vraag uw gratis offerte aan.";
 
 /** Static OG image under `public/og/`. */
 export const DEFAULT_OG_IMAGE_PATH = "/og/mfk-og.jpg" as const;
